@@ -1,4 +1,4 @@
-import sys
+import json
 from pathlib import Path
 
 import pytest
@@ -39,11 +39,21 @@ async def test_query_tool_through_mcp():
             )
 
             assert not result.isError, result.content
+            assert result.content
 
-            # FastMCP should return the structured query result.
-            assert result.structuredContent is not None
+            text_content = next(
+                (
+                    item
+                    for item in result.content
+                    if getattr(item, "type", None) == "text"
+                ),
+                None,
+            )
 
-            data = result.structuredContent
+            assert text_content is not None, result.content
+
+            data = json.loads(text_content.text)
+
             assert data["columns"] == ["email"]
             assert data["rows"] == []
             assert data["row_count"] == 0
