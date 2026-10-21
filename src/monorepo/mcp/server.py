@@ -1,3 +1,5 @@
+from typing import Any
+
 from mcp.server.fastmcp import FastMCP
 from monorepo.mcp.tools.schema import get_database_schema
 from monorepo.mcp.tools.query import execute_readonly_query
@@ -10,12 +12,12 @@ def hello(name: str) -> str:
     return f"Hello, {name}!"
 
 @mcp.tool()
-def inspect_database() -> dict:
+def inspect_database() -> dict[str, Any]:
     """Inspect the current PostgreSQL database and list its tables and columns."""
     return get_database_schema()
 
 @mcp.tool()
-def execute_readonly_query_tool(sql: str) -> dict:
+def execute_readonly_query_tool(sql: str) -> dict[str, Any]:
     """Execute one validated, read-only PostgreSQL query."""
     return execute_readonly_query(sql)
 
